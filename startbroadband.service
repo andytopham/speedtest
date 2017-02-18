@@ -1,0 +1,31 @@
+# Unit file for systemd systems. Leveraged from...
+# http://www.raspberrypi-spy.co.uk/2015/10/how-to-autorun-a-python-script-on-boot-using-systemd/
+# This one configured to start broadband application.
+# Needs to be stored in...
+# /lib/systemd/system/myscript.service
+# and needs 644 permissions.
+# To enable this to run....
+# sudo systemctl daemon-reload
+#  sudo systemctl enable myscript.service
+# then reboot.
+# Check it is running with: sudo systemctl status myscript.service
+# Can also stop/start with...
+# systemctl stop myscript.service
+# systemctl start myscript.service
+# The output from any script run here can be found by....
+#  sudo journalctl -u myscript.service
+#  or... sudo journalctl -u myscript.service --since=yesterday
+#  Note: redirection to a file will never work! The tutorials are all wrong. There is no shell to make it work.
+
+
+[Unit]
+Description=My broadband monitor
+After=multi-user.target
+
+[Service]
+Type=idle
+ExecStart=/usr/bin/python /home/pi/master/rotary/broadband.py
+WorkingDirectory=/home/pi/master/rotary
+
+[Install]
+WantedBy=multi-user.target
