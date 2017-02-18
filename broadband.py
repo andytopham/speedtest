@@ -4,8 +4,9 @@
 # Uses google spreadsheets to store data.
 
 import subprocess, StringIO, time, lcd, spreadsheet
-INTERVAL = 5*60
-NUMLOOPS = 12*2
+INTERVAL = 10		# minutes
+HOURS = 6
+NUMLOOPS = 6 * HOURS
 
 def get_speeds():
 	val = []
@@ -26,6 +27,8 @@ def get_speeds():
 	
 if __name__ == '__main__':
 	print 'Collecting broadband speeds and storing in spreadsheet.'
+	print 'Sampling every', INTERVAL, 'minutes'
+	print 'Running for', HOURS, 'hours' 
 	print 'Making sure we are not using the wifi!'
 	subprocess.call(['ifconfig', 'wlan0', 'down'])
 	print 'Wifi disabled'
@@ -47,7 +50,7 @@ if __name__ == '__main__':
 		myLcd.writerow(1, '                ')
 		myLcd.writerow(1, string)
 		s.write(val)
-		time.sleep(INTERVAL)
+		time.sleep(INTERVAL*60)
 	print 'Finished looping. Exiting.'
 	myLcd.writerow(0,'Finished')
 	
