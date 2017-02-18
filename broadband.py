@@ -7,8 +7,9 @@ import subprocess, StringIO, time, lcd, spreadsheet
 INTERVAL = 5*60
 NUMLOOPS = 12*2
 
-def get_speeds(self):
+def get_speeds():
 	val = []
+	val.append(time.strftime('%H:%M'))
 	try:
 		string = subprocess.check_output(['speedtest', '--simple'])
 		buf = StringIO.StringIO(string)
@@ -25,21 +26,27 @@ def get_speeds(self):
 	
 if __name__ == '__main__':
 	print 'Collecting broadband speeds and storing in spreadsheet.'
+	print 'Making sure we are not using the wifi!'
+	subprocess.call(['ifconfig', 'wlan0', 'down'])
+	print 'Wifi disabled'
 	s = spreadsheet.Spreadsheet()
-	s.open()
-	s.header()
+	s.open("test","w")
+	list = []
+	list.append(time.strftime('%d %b'))
+	s.write(list)	# date in top row
+	val = s.header()
+	s.write(val)
 	print 'Opened spreadsheet.'
 	myLcd = lcd.Screen()
 	myLcd.clear()
 	myLcd.writerow(0, 'Broadband')
 	for i in range(NUMLOOPS):
-		val = s.get_speeds()
-		t= time.strftime('%H:%M')
-		print t, 'Ping=', val[0], 'ms. Download=', val[1], 'Mb/s', 'Upload=', val[2], 'Mb/s'
-		string = t + ' ' + str(val[0]) + ' ' + str(val[1]) + ' ' + str(val[2])
+		val = get_speeds()
+		string = time.strftime('%H:%M') + ' ' + str(val[0]) + ' ' + str(val[1]) + ' ' + str(val[2])
+		print string
 		myLcd.writerow(1, '                ')
 		myLcd.writerow(1, string)
-		s.update(val)
+		s.write(val)
 		time.sleep(INTERVAL)
 	print 'Finished looping. Exiting.'
 	myLcd.writerow(0,'Finished')
