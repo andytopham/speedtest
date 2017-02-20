@@ -12,11 +12,13 @@
 # Can also stop/start with...
 # systemctl stop myscript.service
 # systemctl start myscript.service
+# To see status: systemctl status myservice.service
+# To remove service: systemctl disable myservice.service
+# and then possibly: systemctl reset-failed
 # The output from any script run here can be found by....
 #  sudo journalctl -u myscript.service
 #  or... sudo journalctl -u myscript.service --since=yesterday
 #  Note: redirection to a file will never work! The tutorials are all wrong. There is no shell to make it work.
-
 
 [Unit]
 Description=My broadband monitor

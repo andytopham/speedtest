@@ -29,7 +29,6 @@ if __name__ == '__main__':
 	print 'Collecting broadband speeds and storing in spreadsheet.'
 	print 'Sampling every', INTERVAL, 'minutes'
 	print 'Running for', HOURS, 'hours' 
-	print 'Making sure we are not using the wifi!'
 	subprocess.call(['ifconfig', 'wlan0', 'down'])
 	print 'Wifi disabled'
 	s = spreadsheet.Spreadsheet()
@@ -45,7 +44,7 @@ if __name__ == '__main__':
 	myLcd.writerow(0, 'Broadband')
 	for i in range(NUMLOOPS):
 		val = get_speeds()
-		string = time.strftime('%H:%M') + ' ' + str(val[0]) + ' ' + str(val[1]) + ' ' + str(val[2])
+		string = str(val[0]) + ' ' + str(val[1]) + ' ' + str(val[2]) + ' ' + str(val[3])
 		print string
 		myLcd.writerow(1, '                ')
 		myLcd.writerow(1, string)
